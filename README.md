@@ -1,54 +1,217 @@
 # Employee Management System
 
-Core Python + MySQL + bcrypt. No Flask, Django, FastAPI, HTML, CSS or JavaScript.
+A simple Employee Management System built with **Core Python + MySQL + HTML/CSS/JavaScript**.
 
-## Fresh setup
+This project does **not** use Flask, Django, FastAPI, or any other backend framework. The web application uses Python's built-in `http.server`.
 
-1. Run database.sql in MySQL Workbench.
-2. Edit config.py and set your MySQL password.
-3. Install:
-   pip install -r requirements.txt
-4. Create the first admin:
-   python create_admin.py
-5. Run:
-   python main.py
+## Features
 
-## Existing database
+- Admin and Employee login
+- Bcrypt password hashing
+- Role-based access
+- Employee CRUD operations
+- Department management
+- Attendance management
+- Leave application and approval
+- Employee profile and personal attendance/leave view
+- Terminal/CLI application
+- Browser-based web application
 
-If employee_management_db already exists, do NOT run database.sql blindly.
+## Tech Stack
 
-First run:
-DESCRIBE employees;
+- Python 3
+- MySQL
+- `mysql-connector-python`
+- `bcrypt`
+- HTML, CSS, JavaScript
+- Python `http.server`
 
-If user_id is missing, run migrate_existing.sql.
+## Project Structure
 
-Then connect the correct existing employee login:
-SELECT user_id, username, role FROM users;
-SELECT employee_id, first_name, last_name, email FROM employees;
+```text
+employee-management-system/
+│
+├── main.py              # Terminal application
+├── server.py            # Core Python web server
+├── config.py            # Database configuration
+├── database.py          # MySQL connection
+├── auth.py              # Login and registration
+├── employee.py          # Employee operations
+├── department.py        # Department operations
+├── attendance.py        # Attendance operations
+├── leave.py             # Leave operations
+├── create_admin.py      # Create admin account
+│
+├── database.sql         # Database setup
+├── migrate_existing.sql # Migration for existing databases
+├── requirements.txt     # Python dependencies
+│
+└── static/
+    ├── index.html
+    ├── style.css
+    └── app.js
+```
 
-Example:
-UPDATE employees SET user_id = 2 WHERE employee_id = 3;
+## Requirements
 
-## Registration
+Install:
 
-The admin must first add an employee with an email.
+- Python 3
+- MySQL Server
+- MySQL Workbench
 
-The employee then chooses Employee Registration and enters that same email.
-The account is automatically created with role = employee and linked to that employee.
+## Setup
 
-Passwords are hashed with bcrypt before storage.
+### 1. Clone the repository
 
-## Access
+```bash
+git clone https://github.com/Tarunsingh465/Employee-Management-System-No-backend-framework-.git
+cd Employee-Management-System-No-backend-framework-
+```
 
-Admin:
-- Full employee CRUD
-- Departments
-- Attendance
-- View all leaves
+### 2. Create a virtual environment
+
+Windows PowerShell:
+
+```powershell
+python -m venv mse
+.\mse\Scripts\Activate.ps1
+```
+
+### 3. Install dependencies
+
+```powershell
+pip install -r requirements.txt
+```
+
+### 4. Create the database
+
+Open **MySQL Workbench** and run:
+
+```text
+database.sql
+```
+
+This creates the `employee_management_db` database and required tables.
+
+## Database Configuration
+
+The MySQL password is read from the `DB_PASSWORD` environment variable.
+
+In PowerShell:
+
+```powershell
+$env:DB_PASSWORD="YOUR_MYSQL_PASSWORD"
+```
+
+The `config.py` should use:
+
+```python
+import os
+
+DB_HOST = "localhost"
+DB_USER = "root"
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_NAME = "employee_management_db"
+```
+
+**Do not put your actual MySQL password in `config.py` or commit it to GitHub.**
+
+## Create Admin Account
+
+Run:
+
+```powershell
+python create_admin.py
+```
+
+Enter the admin username and password when prompted.
+
+Passwords are stored using bcrypt hashing.
+
+## Run the Terminal Application
+
+```powershell
+python main.py
+```
+
+You can then log in as an admin or register an employee.
+
+## Run the Web Application
+
+Set the database password first if needed:
+
+```powershell
+$env:DB_PASSWORD="YOUR_MYSQL_PASSWORD"
+```
+
+Start the server:
+
+```powershell
+python server.py
+```
+
+Open your browser and go to:
+
+```text
+http://localhost:8000
+```
+
+## User Roles
+
+### Admin
+
+- Add, view, search, update and delete employees
+- Add/view departments
+- Mark/view attendance
+- View leaves
 - Approve/reject leaves
 
-Employee:
-- Own profile
-- Own attendance
-- Apply for own leave
+### Employee
+
+- View own profile
+- View own attendance
+- Apply for leave
 - View own leave
+
+## Employee Registration
+
+The admin must first create an employee record with an email.
+
+The employee can then use **Employee Registration** with the same email to create their login account.
+
+The account is automatically linked to that employee.
+
+## Existing Database
+
+If you already have an `employee_management_db` database, do **not** blindly run `database.sql`.
+
+Check your existing structure first:
+
+```sql
+DESCRIBE employees;
+```
+
+If the existing database needs the newer employee/user relationship, check:
+
+```text
+migrate_existing.sql
+```
+
+## Security
+
+- Passwords are hashed with bcrypt.
+- SQL queries use parameterized values.
+- Database passwords are kept outside the source code.
+- `.gitignore` excludes virtual environments, Python cache files, `.env`, and other unnecessary files.
+
+## Important
+
+This project is designed for **local development and learning**. The web server uses Python's built-in `http.server` and is not intended as a production web server.
+
+## Author
+
+**Tarun Singh**
+
+GitHub:  
+https://github.com/Tarunsingh465
